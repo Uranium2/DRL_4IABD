@@ -65,6 +65,7 @@ class Player:
         self.app.god_mode_timer = 240
         self.app.god_trigger = True
 
+
     def move(self, direction):
         self.stored_direction = direction
 

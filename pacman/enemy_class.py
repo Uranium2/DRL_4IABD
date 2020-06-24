@@ -13,7 +13,7 @@ class Enemy:
         self.color = self.get_color()
         self.direction = vec(0, 0)
         self.personality = self.set_personality()
-        self.speed = self.set_speed()
+        self.speed = self.get_speed()
         self.target = None
         self.init_pos = vec(pos.x, pos.y)
 
@@ -35,7 +35,7 @@ class Enemy:
         self.color = self.get_color()
         self.direction = vec(0, 0)
         self.personality = self.set_personality()
-        self.speed = self.set_speed()
+        self.speed = self.get_speed()
         self.target = None
         print(time.time() - start)
 
@@ -156,7 +156,7 @@ class Enemy:
         return vec(x, y)
 
 
-    def set_speed(self):
+    def get_speed(self):
         if self.nb == 0:
             return 2
         if self.nb == 1:
