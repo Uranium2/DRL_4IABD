@@ -30,8 +30,8 @@ class Player:
                     self.direction = self.stored_direction
                 self.able_to_move = self.can_move()
 
-        self.grid_pos[0] = (self.pix_pos[0] - self.app.cell_width // 2 )// self.app.cell_width + 1
-        self.grid_pos[1] = (self.pix_pos[1] - self.app.cell_height // 2 )// self.app.cell_height + 1
+        self.grid_pos[0] = (self.pix_pos[0] - self.app.cell_width // 2) // self.app.cell_width + 1
+        self.grid_pos[1] = (self.pix_pos[1] - self.app.cell_height // 2) // self.app.cell_height + 1
 
         if self.on_coin():
             self.eat_coin()
@@ -61,6 +61,7 @@ class Player:
     
     def eat_food(self):
         self.app.food.remove(self.grid_pos)
+        self.current_score += 10
         self.app.god_mode = True
         self.app.god_mode_timer = 240
         self.app.god_trigger = True

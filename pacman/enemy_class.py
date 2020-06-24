@@ -2,7 +2,6 @@ import pygame
 from settings import *
 from pygame.math import Vector2 as vec
 import random
-import time
 
 class Enemy:
     def __init__(self, app, pos, nb):
@@ -29,7 +28,6 @@ class Enemy:
         self.grid_pos[1] = (self.pix_pos[1] - self.app.cell_height // 2 ) // self.app.cell_height + 1
 
     def reset(self):
-        start = time.time()
         self.grid_pos = vec(self.init_pos.x, self.init_pos.y)
         self.pix_pos = vec(self.grid_pos.x * self.app.cell_width, self.grid_pos.y * self.app.cell_height)
         self.color = self.get_color()
@@ -37,7 +35,6 @@ class Enemy:
         self.personality = self.set_personality()
         self.speed = self.get_speed()
         self.target = None
-        print(time.time() - start)
 
     def get_color(self):
         color = None

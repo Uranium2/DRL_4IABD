@@ -122,13 +122,16 @@ class App:
         for enemy in self.enemies:
             enemy.update()
 
+        if len(self.coins) == 0:
+            enemy.reset()
+
         for enemy in self.enemies:
             if enemy.grid_pos == self.player.grid_pos and self.god_mode_timer == 0:
                 self.update_high_score()
                 self.reset_game()
             if enemy.grid_pos == self.player.grid_pos and self.god_mode_timer >= 0:
-                print("Eating ennemy")
                 enemy.reset()
+                self.player.current_score += 20
         
         if self.god_mode_timer > 0:
             self.god_mode_timer -= 1
