@@ -3,7 +3,7 @@ from typing import Callable
 
 import numpy as np
 
-from common_func import tabular_uniform_random_policy, step_until_the_end_of_the_episode_and_return_history
+from common_func import tabular_uniform_random_policy, step_until_the_end_of_the_episode_and_return_history, step_until_the_end_of_the_episode_and_return_history_2
 
 
 def iterative_policy_evaluation(
@@ -156,6 +156,61 @@ def monte_carlo_with_exploring_starts_control(
         s1, r1, t1 = step_func(s0, a0, T, S, P)
 
         s_list, a_list, _, r_list = step_until_the_end_of_the_episode_and_return_history(T, S, P, s1, pi, is_terminal_func,
+                                                                                         step_func,
+                                                                                         max_steps_per_episode)
+        s_list = [s0] + s_list
+        a_list = [a0] + a_list
+        r_list = [r1] + r_list
+
+        G = 0
+        for t in reversed(range(len(s_list))):
+            G = gamma * G + r_list[t]
+            st = s_list[t]
+            at = a_list[t]
+
+            if (st, at) in zip(s_list[0:t], a_list[0:t]):
+                continue
+            returns[st, at] += G
+            returns_count[st, at] += 1
+            q[st, at] = returns[st, at] / returns_count[st, at]
+            pi[st, :] = 0.0
+            pi[st, np.argmax(q[st, :])] = 1.0
+    return q, pi
+
+
+def monte_carlo_with_exploring_starts_control_2(
+        s_terminal,
+        states_count: int,
+        actions_count: int,
+        is_terminal_func: Callable,
+        step_func: Callable,
+        episodes_count: int = 10000,
+        max_steps_per_episode: int = 10,
+        gamma: float = 0.99,
+) -> (np.ndarray, np.ndarray):
+    states = np.arange(states_count)
+    actions = np.arange(actions_count)
+    pi = tabular_uniform_random_policy(states_count, actions_count)
+    q = np.random.random((states_count, actions_count))
+    for s in states:
+        if is_terminal_func(s, s_terminal):
+            q[s, :] = 0.0
+            pi[s, :] = 0.0
+
+    returns = np.zeros((states_count, actions_count))
+    returns_count = np.zeros((states_count, actions_count))
+    for episode_id in range(episodes_count):
+
+        s0 = np.random.choice(states)
+
+        if is_terminal_func(s0, s_terminal):
+            continue
+
+        a0 = np.random.choice(actions)
+
+        s1, r1, t1 = step_func(s0, a0, s_terminal)
+        
+        s_list, a_list, _, r_list = step_until_the_end_of_the_episode_and_return_history_2(s_terminal, s1, pi, is_terminal_func,
                                                                                          step_func,
                                                                                          max_steps_per_episode)
         s_list = [s0] + s_list

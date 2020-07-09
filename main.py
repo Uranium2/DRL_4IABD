@@ -3,7 +3,7 @@ import numpy as np
 import pygame
 
 from algo import iterative_policy_evaluation, policy_iteration, value_iteration, \
-    monte_carlo_with_exploring_starts_control
+    monte_carlo_with_exploring_starts_control, monte_carlo_with_exploring_starts_control_2
 from common_func import tabular_uniform_random_policy, is_terminal, event_loop
 from grid_world import create_grid_world, step, reset_grid
 from grid_world_UI import display_grid, display_reward_grid, display_mouse_grid
@@ -13,8 +13,10 @@ from line_world_UI import display_line,  display_reward_line, display_mouse_line
 
 
 ## policy_evaluation
-from tic_tac_toe import create_tic_tac
+from tic_tac_toe import create_tic_tac, is_terminate_tic_tac, step_tic_tac, check_terminal_states
 from tic_tac_toe_UI import display_grid_tic_tac
+
+import itertools
 
 
 def test_line_iterative_policy_evaluation():
@@ -358,7 +360,7 @@ def test_grid_monte_carlo_es():
     S, A, T, P = create_grid_world(w, h, rewards, terminal)
 
     start_time = time()
-    Q, Pi = monte_carlo_with_exploring_starts_control(T, S, P, len(S), len(A), is_terminal, step,
+    Q, Pi = monte_carlo_with_exploring_starts_control_2(len(S), len(A), is_terminal, step,
                                                       episodes_count=10000, max_steps_per_episode=100)
     print("--- %s seconds ---" % (time() - start_time))
 
@@ -396,34 +398,26 @@ def test_grid_monte_carlo_es():
 def test_tic_tac_monte_carlo_es():
     w = 3
     h = 3
-    pygame.init()
-    win = pygame.display.set_mode((w * 100, h * 100))
-    create_tic_tac()
-    while (True):
-        display_grid_tic_tac(win, w, h)
-        pygame.display.flip()
+    # pygame.init()
+    # win = pygame.display.set_mode((w * 100, h * 100))
+    # create_tic_tac()
 
-import itertools
+    player = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    S = [[list(i[0:3]), list(i[3:6]), list(i[6:10])] for i in itertools.product(player, repeat=9)]
+
+    s_terminal = [(i, check_terminal_states(s)) for i, s in enumerate(S)]
+    s_terminal = dict(s_terminal)
+
+    A = np.arange(h * w)
+
+    Q, Pi = monte_carlo_with_exploring_starts_control_2(s_terminal, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
+                                                      episodes_count=10000, max_steps_per_episode=100)
+    # while (True):
+    #     display_grid_tic_tac(win, w, h)
+    #     pygame.display.flip()
+
+
 if __name__ == '__main__':
-    player = ['X', 'O', ' ']
-    all_possible_states = [[list(i[0:3]), list(i[3:6]), list(i[6:10])] for i in itertools.product(player, repeat=9)]
-    print(all_possible_states)
-    print(np.shape(all_possible_states))
-    n_states = len(all_possible_states)
-    #test_tic_tac_monte_carlo()
-    states_dict = {}
-    print(n_states)
-    state_values_for_AI = np.full((n_states), 0.0)
-    print(len(state_values_for_AI))
-    for i in range(n_states):
-        states_dict[i] = all_possible_states[i]
-        print(states_dict[i])
-        sleep(1)
-    # actions = []
-    # for i in range(3):
-    #     for j in range(3):
-    #         actions.append((i, j))
-    # print(actions)
     #test_grid_iterative_policy_evaluation()
     #test_line_iterative_policy_evaluation()
 
@@ -436,3 +430,5 @@ if __name__ == '__main__':
     #test_line_monte_carlo_es()
     #test_grid_policy_iteration_2()
     #test_grid_monte_carlo_es()
+
+    test_tic_tac_monte_carlo_es()

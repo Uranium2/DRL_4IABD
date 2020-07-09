@@ -8,10 +8,59 @@ def create_tic_tac(w, h):
     S = np.arange(num_states)
     A = np.arange(num_states)
 
-def is_terminate_tic_tac():
-    print("dosomething")
+def step_tic_tac(state, a, s_terminal):
+    print("state ", state)
+    print("action", a)
+    if s_terminal[state] == [0, 1, 0]:
+        is_terminal = True
+        r = 1
+    if s_terminal[state] == [0, 0, 1]:
+        is_terminal = True
+        r = -1
+    if s_terminal[state] == [1, 0, 0]:
+        is_terminal = False
+        r = 0
 
-    print(map)
+    return state, r, is_terminal  # position, reward, si terminal
+
+
+
+def is_terminate_tic_tac(s, states):
+    if states[s] != [1, 0, 0]:
+        return False
+    return False
+
+def check_terminal_states(s):
+    for i in range(3):
+        if (s[i][0][1:] == s[i][1][1:] and s[i][0][1:] == s[i][2][1:] and s[i][0][0] != 1):
+            return s[i][0]
+
+    for i in range(3):
+        if (s[0][0][1:] == s[1][0][1:] and s[0][0][1:] == s[2][0][1:] and s[0][0][0] != 1):
+            return s[i][0]
+
+    if (s[0][0][1:] == s[1][1][1:] and s[0][0][1:] == s[2][2][1:] and s[0][0][0] != 1):
+        return s[i][0]
+
+    if (s[0][2][1:] == s[1][1][1:] and s[0][0][1:] == s[2][0][1:] and s[0][2][0] != 1):
+        return s[i][0]
+    return [1, 0, 0]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 def print_board(game_board):
     header = [ i for i in range(len(game_board[0]))]
     print("  | ", end="")
