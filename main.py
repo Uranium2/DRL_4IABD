@@ -413,13 +413,17 @@ if __name__ == '__main__':
     #test_tic_tac_monte_carlo()
     states_dict = {}
     print(n_states)
+    state_values_for_AI = np.full((n_states), 0.0)
+    print(len(state_values_for_AI))
     for i in range(n_states):
         states_dict[i] = all_possible_states[i]
         print(states_dict[i])
         sleep(1)
-
-
-
+    # actions = []
+    # for i in range(3):
+    #     for j in range(3):
+    #         actions.append((i, j))
+    # print(actions)
     #test_grid_iterative_policy_evaluation()
     #test_line_iterative_policy_evaluation()
 
