@@ -412,6 +412,10 @@ def test_tic_tac_monte_carlo_es():
 
     Q, Pi = monte_carlo_with_exploring_starts_control_2(s_terminal, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
                                                       episodes_count=10000, max_steps_per_episode=100)
+    
+    print(Q)
+    print(" ")
+    print(Pi)
     # while (True):
     #     display_grid_tic_tac(win, w, h)
     #     pygame.display.flip()

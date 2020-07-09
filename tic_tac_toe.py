@@ -9,8 +9,6 @@ def create_tic_tac(w, h):
     A = np.arange(num_states)
 
 def step_tic_tac(state, a, s_terminal):
-    print("state ", state)
-    print("action", a)
     if s_terminal[state] == [0, 1, 0]:
         is_terminal = True
         r = 1

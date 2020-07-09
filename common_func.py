@@ -49,7 +49,7 @@ def step_until_the_end_of_the_episode_and_return_history(
 
 def step_until_the_end_of_the_episode_and_return_history_2(
         s_terminal,
-        s0: int,
+        st: int,
         pi: np.ndarray,
         is_terminal_func: Callable,
         step_func: Callable,
@@ -60,7 +60,6 @@ def step_until_the_end_of_the_episode_and_return_history_2(
     a_list = []
     s_p_list = []
     r_list = []
-    st = s0
     actions = np.arange(pi.shape[1])
     steps_count = 0
     while not is_terminal_func(st, s_terminal) and steps_count < max_steps:
