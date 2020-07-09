@@ -8,15 +8,23 @@ def create_grid_world(w, h, reward_list, terminal):
     T = np.array(terminal)  # Terminal State ( position)
     P = np.zeros((len(S), len(A), len(S), 2))
 
-    for x in range(w * h):
-        if (x + 1) % w != 0:  # Droite
-            P[x, 1, x + 1, 0] = 1.0
-        if x % w != 0:  # Gauche
-            P[x, 0, x - 1, 0] = 1.0
-        if x >= w:  # Top
-            P[x, 2, x - w, 0] = 1.0
-        if x < w * h - w:  # Bot
-            P[x, 3, x + w, 0] = 1.0
+    for s in S:
+        if (s % w) == 0:
+            P[s, 0, s, 0] = 1.0
+        else:
+            P[s, 0, s - 1, 0] = 1.0
+        if (s + 1) % w == 0:
+            P[s, 1, s, 0] = 1.0
+        else:
+            P[s, 1, s + 1, 0] = 1.0
+        if s < w:
+            P[s, 2, s, 0] = 1.0
+        else:
+            P[s, 2, s - w, 0] = 1.0
+        if s >= (num_states - w):
+            P[s, 3, s, 0] = 1.0
+        else:
+            P[s, 3, s + w, 0] = 1.0
 
     for r in reward_list:
         set_reward(P, r, w, h)
@@ -39,8 +47,9 @@ def reset_grid(w, h) -> int:
     return w * h // 2
 
 
-def step(state: int, a: int, T, S, P ) -> (int, float, bool):
+def step(state: int, a: int, T, S, P) -> (int, float, bool):
     assert (state not in T)
+
     s_p = np.random.choice(S, p=P[state, a, :, 0])  # trouve ta position d'arrivée
     r = P[state, a, s_p, 1]  # recupere reward
     return s_p, r, (s_p in T)  # position, reward, si terminal

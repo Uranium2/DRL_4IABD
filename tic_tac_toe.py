@@ -1,5 +1,17 @@
+import numpy as np
 
 
+def create_tic_tac(w, h):
+    # [1 0 0] = empty , [0 1 0] = nos pions, [0 0 1] = pions ennemis
+    map = [[1, 0, 0] for i in range(9)]
+    num_states = w * h
+    S = np.arange(num_states)
+    A = np.arange(num_states)
+
+def is_terminate_tic_tac():
+    print("dosomething")
+
+    print(map)
 def print_board(game_board):
     header = [ i for i in range(len(game_board[0]))]
     print("  | ", end="")
@@ -108,5 +120,5 @@ def play_tic_tac_toe(size):
 
     return check_winner(game_board)
 
-winner = play_tic_tac_toe(3)
-print("Winner is :", winner)
+# winner = play_tic_tac_toe(3)
+# print("Winner is :", winner)
