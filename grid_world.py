@@ -20,11 +20,7 @@ def create_grid_world(w, h, reward_list, terminal):
 
     for r in reward_list:
         set_reward(P, r, w, h)
-
     return S, A, T, P
-
-def tabular_uniform_random_policy(space_size: int, action_size: int):
-    return np.ones((space_size, action_size)) / action_size
 
 def set_reward(P, reward_tuple, n, m):
     if (reward_tuple[0] + 1) % n != 0: # case de Droite
@@ -39,11 +35,9 @@ def set_reward(P, reward_tuple, n, m):
     if reward_tuple[0] + n < n * m - n: # case du bot
         P[reward_tuple[0] + n, 2, reward_tuple[0], 1] = reward_tuple[1]
 
-def reset(w, h) -> int:
+def reset_grid(w, h) -> int:
     return w * h // 2
 
-def is_terminal(state: int, T) -> bool:
-    return state in T
 
 def step(state: int, a: int, T, S, P ) -> (int, float, bool):
     assert (state not in T)

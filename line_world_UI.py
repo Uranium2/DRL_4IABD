@@ -10,24 +10,14 @@ def display_line(win, num_states):
 
 
 
-def event_loop():
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                exit()
-
-
-
-def display_mouse(win, st, num_states):
+def display_mouse_line(win, st, num_states):
     cheese_img = pygame.image.load("images/mouse.png").convert_alpha()
     cheese_img = pygame.transform.scale(cheese_img, (40, 40))
 
     win.blit(cheese_img, (st * 100 + 30, 35))
     pygame.display.flip()
 
-def display_reward(win, rewards, num_states):
+def display_reward_line(win, rewards, num_states):
     cheese_img = pygame.image.load("images/cheese.png").convert_alpha()
     cheese_img = pygame.transform.scale(cheese_img, (30, 30))
 
