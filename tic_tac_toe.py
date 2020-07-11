@@ -59,15 +59,21 @@ def step_tic_tac(state, a, s_terminal, s_sp, player):
     if s_terminal[state_sp] == pin_me:
         is_terminal = True
         r = 10
-    if s_terminal[state_sp] == pin_ennemy:
+    elif s_terminal[state_sp] == pin_ennemy:
         is_terminal = True
         r = -10
-    if s_terminal[state_sp] == [1, 0, 0]:
+    elif s_terminal[state_sp] == [1, 0, 0]:
         is_terminal = False
         r = 0
-    if s_terminal[state_sp] == [1, 1, 1]:
+    elif s_terminal[state_sp] == [1, 1, 1]:
         is_terminal = True
         r = 1
+    else:
+        print(s_terminal[state_sp])
+        print("ERREUR")
+    print("player: " + str(player))
+    print(r)
+    print(is_terminal)
     return state_sp, r, is_terminal, a  # position, reward, si terminal, real action made
 
 

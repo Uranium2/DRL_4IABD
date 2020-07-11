@@ -14,7 +14,7 @@ from line_world_UI import display_line,  display_reward_line, display_mouse_line
 
 ## policy_evaluation
 from tic_tac_toe import create_tic_tac, is_terminate_tic_tac, step_tic_tac, check_terminal_states
-from tic_tac_toe_UI import display_grid_tic_tac, display_players
+from tic_tac_toe_UI import display_grid_tic_tac, display_players, display_win
 
 import itertools
 
@@ -415,6 +415,7 @@ def test_tic_tac_monte_carlo_es():
     state = s_sp[1][str(game_map)]
     is_terminal = False
     while (not is_terminal):
+        print(is_terminal)
         display_grid_tic_tac(win, w, h)
         pygame.display.flip()
         event_loop()
@@ -422,14 +423,17 @@ def test_tic_tac_monte_carlo_es():
         #print(Q0[state])
         state, r0, is_terminal, a = step_tic_tac(state, a, s_terminal, s_sp, 0)
         display_players(win, state, w, h, s_sp)
-        sleep(1)
+        sleep(0.3)
         if r0 == 10:
-            textsurface = myfont.render("Player X Wins",  True, (0, 0, 0))
-            win.blit(textsurface, (50, 150))
+            print("a")
+            display_win(win, 0, state, s_sp)
             break
         elif r0 == -10:
-            textsurface = myfont.render("Player O Wins",  True, (0, 0, 0))
-            win.blit(textsurface, (50, 150))
+            print("b")
+            display_win(win, 1, state, s_sp)
+            break
+        elif r0 == 1:
+            display_win(win, -1, state, s_sp)
             break
         a = np.random.choice(np.arange(9))
         state, r1, is_terminal, a = step_tic_tac(state, a, s_terminal, s_sp, 1)
@@ -441,16 +445,18 @@ def test_tic_tac_monte_carlo_es():
         # print(Q1[state])
         # state, r, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 1)
         display_players(win, state, w, h, s_sp)
-        sleep(1)
+        sleep(0.3)
         if r1 == 10:
-            textsurface = myfont.render("Player O Wins",  False, (0, 0, 0))
-            win.blit(textsurface,  (h//2, w//2))
+            display_win(win, 1, state, s_sp)
             break
         elif r1 == -10:
-            textsurface = myfont.render("Player X Wins",  False, (0, 0, 0))
-            win.blit(textsurface, (h//2, w//2))
+            display_win(win, 0, state, s_sp)
             break
-    pygame.display.flip()
+        elif r1 == 1:
+
+            display_win(win, -1, state, s_sp)
+            break
+
     sleep(10)
 
 
