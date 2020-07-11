@@ -14,7 +14,7 @@ from line_world_UI import display_line,  display_reward_line, display_mouse_line
 
 ## policy_evaluation
 from tic_tac_toe import create_tic_tac, is_terminate_tic_tac, step_tic_tac, check_terminal_states
-from tic_tac_toe_UI import display_grid_tic_tac
+from tic_tac_toe_UI import display_grid_tic_tac, display_players
 
 import itertools
 
@@ -398,43 +398,62 @@ def test_grid_monte_carlo_es():
 def test_tic_tac_monte_carlo_es():
     w = 3
     h = 3
-    # pygame.init()
-    # win = pygame.display.set_mode((w * 100, h * 100))
-    # create_tic_tac()
-
-    player = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-    S = [[list(i[0:3]), list(i[3:6]), list(i[6:10])] for i in itertools.product(player, repeat=9)]
-
-    s_terminal = [(i, check_terminal_states(s)) for i, s in enumerate(S)]
-    
-    s_terminal = dict(s_terminal)
-
-    s_i = [(str(s),i) for i, s in enumerate(S)]
-    s_i = dict(s_i)
-    i_s = [(i, s) for i, s in enumerate(S)]
-    i_s = dict(i_s)
-
-    s_sp = [i_s, s_i]
+    pygame.init()
+    win = pygame.display.set_mode((w * 100, h * 100))
+    myfont = pygame.font.SysFont('Comic Sans MS', 30)
+    s_terminal, s_sp, S, A = create_tic_tac(w, h)
 
 
-    A = np.arange(h * w)
+
     print("monte_carlo_with_exploring_starts_control_2")
     Q0, Pi0 = monte_carlo_with_exploring_starts_control_2(s_terminal, s_sp, 0, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
                                                       episodes_count=10000, max_steps_per_episode=100)
-    
-    Q1, Pi1 = monte_carlo_with_exploring_starts_control_2(s_terminal, s_sp, 1, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
-                                                      episodes_count=10000, max_steps_per_episode=100)
-    
-    print(Q0)
-    print(" ")
-    print(Pi0)
-    print(" ")
-    print(Q1)
-    print(" ")
-    print(Pi1)
-    while (True):
+
+    # Q1, Pi1 = monte_carlo_with_exploring_starts_control_2(s_terminal, s_sp, 1, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
+    #                                                   episodes_count=10000, max_steps_per_episode=100)
+    game_map = s_sp[0][0]
+    state = s_sp[1][str(game_map)]
+    is_terminal = False
+    while (not is_terminal):
         display_grid_tic_tac(win, w, h)
         pygame.display.flip()
+        event_loop()
+        a = np.argmax(Q0[state])
+        #print(Q0[state])
+        state, r0, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 0)
+        display_players(win, state, w, h, s_sp)
+        sleep(1)
+        if r0 == 10:
+            textsurface = myfont.render("Player X Wins",  True, (0, 0, 0))
+            win.blit(textsurface, (50, 150))
+            break
+        elif r0 == -10:
+            textsurface = myfont.render("Player O Wins",  True, (0, 0, 0))
+            win.blit(textsurface, (50, 150))
+            break
+        a = np.random.choice(np.arange(9))
+        state, r1, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 1)
+
+
+        # a = np.argmax(Q1[state])
+        #
+        # print("J2 action " + str(a))
+        # print(Q1[state])
+        # state, r, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 1)
+        display_players(win, state, w, h, s_sp)
+        sleep(1)
+        if r1 == 10:
+            textsurface = myfont.render("Player O Wins",  False, (0, 0, 0))
+            win.blit(textsurface,  (h//2, w//2))
+            break
+        elif r1 == -10:
+            textsurface = myfont.render("Player X Wins",  False, (0, 0, 0))
+            win.blit(textsurface, (h//2, w//2))
+            break
+    pygame.display.flip()
+    sleep(10)
+
+
 
 
 if __name__ == '__main__':
@@ -452,3 +471,6 @@ if __name__ == '__main__':
     #test_grid_monte_carlo_es()
 
     test_tic_tac_monte_carlo_es()
+    # s = [[[0, 1, 0], [0, 1, 0], [0, 0, 1]], [[0, 1, 0], [0, 0, 1], [0, 0, 1]], [[1, 0, 0], [0, 1, 0], [0, 0, 1]]]
+    # print(s)
+    # print(check_terminal_states(s))

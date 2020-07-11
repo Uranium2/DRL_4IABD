@@ -1,12 +1,31 @@
+import itertools
+
 import numpy as np
 
 
 def create_tic_tac(w, h):
-    # [1 0 0] = empty , [0 1 0] = nos pions, [0 0 1] = pions ennemis
-    map = [[1, 0, 0] for i in range(9)]
-    num_states = w * h
-    S = np.arange(num_states)
-    A = np.arange(num_states)
+    player = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    S = [[list(i[0:3]), list(i[3:6]), list(i[6:10])] for i in itertools.product(player, repeat=9)]
+
+    s_terminal = [(i, check_terminal_states(s)) for i, s in enumerate(S)]
+
+    s_terminal = dict(s_terminal)
+
+    s_i = [(str(s), i) for i, s in enumerate(S)]
+    s_i = dict(s_i)
+    i_s = [(i, s) for i, s in enumerate(S)]
+    i_s = dict(i_s)
+
+    s_sp = [i_s, s_i]
+    A = np.arange(h * w)
+    return s_terminal, s_sp, S, A
+
+
+#     # [1 0 0] = empty , [0 1 0] = nos pions, [0 0 1] = pions ennemis
+
+#     num_states = w * h
+#     S = np.arange(num_states)
+#     A = np.arange(num_states)
 
 def step_tic_tac(state, a, s_terminal, s_sp, player):
 
@@ -36,16 +55,19 @@ def step_tic_tac(state, a, s_terminal, s_sp, player):
     state_board.append(l_board[6:])
     state_sp = s_sp[1][str(state_board)]
 
-    if s_terminal[state] == pin_me:
+
+    if s_terminal[state_sp] == pin_me:
         is_terminal = True
-        r = 1
-    if s_terminal[state] == pin_ennemy:
+        r = 10
+    if s_terminal[state_sp] == pin_ennemy:
         is_terminal = True
-        r = -1
-    if s_terminal[state] == [1, 0, 0]:
+        r = -10
+    if s_terminal[state_sp] == [1, 0, 0]:
         is_terminal = False
         r = 0
-
+    if s_terminal[state_sp] == [1, 1, 1]:
+        is_terminal = True
+        r = 1
     return state_sp, r, is_terminal  # position, reward, si terminal
 
 
@@ -61,8 +83,8 @@ def check_terminal_states(s):
             return s[i][0]
 
     for i in range(3):
-        if (s[0][0][1:] == s[1][0][1:] and s[0][0][1:] == s[2][0][1:] and s[0][0][0] != 1):
-            return s[i][0]
+        if (s[0][i][1:] == s[1][i][1:] and s[0][i][1:] == s[2][i][1:] and s[0][i][0] != 1):
+            return s[0][i]
 
     if (s[0][0][1:] == s[1][1][1:] and s[0][0][1:] == s[2][2][1:] and s[0][0][0] != 1):
         return s[i][0]
@@ -75,15 +97,6 @@ def check_terminal_states(s):
             if s[l][r] == [1, 0, 0]:
                 return [1, 0, 0]
     return [1, 1, 1]
-
-
-
-
-
-
-
-
-
 
 
 
