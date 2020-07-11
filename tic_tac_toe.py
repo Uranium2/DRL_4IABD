@@ -87,10 +87,10 @@ def check_terminal_states(s):
             return s[0][i]
 
     if (s[0][0][1:] == s[1][1][1:] and s[0][0][1:] == s[2][2][1:] and s[0][0][0] != 1):
-        return s[i][0]
+        return s[0][0]
 
     if (s[0][2][1:] == s[1][1][1:] and s[0][0][1:] == s[2][0][1:] and s[0][2][0] != 1):
-        return s[i][0]
+        return s[2][0]
 
     for l in range(3):
         for r in range(3):
