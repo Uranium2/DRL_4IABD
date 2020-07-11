@@ -210,7 +210,7 @@ def monte_carlo_with_exploring_starts_control_2(
 
         a0 = np.random.choice(actions)
 
-        s1, r1, t1 = step_func(s0, a0, s_terminal, s_sp, player)
+        s1, r1, t1, a0 = step_func(s0, a0, s_terminal, s_sp, player)
         
         s_list, a_list, _, r_list = step_until_the_end_of_the_episode_and_return_history_2(s_terminal,
                                                                                         s_sp,

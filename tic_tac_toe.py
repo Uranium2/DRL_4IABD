@@ -68,7 +68,7 @@ def step_tic_tac(state, a, s_terminal, s_sp, player):
     if s_terminal[state_sp] == [1, 1, 1]:
         is_terminal = True
         r = 1
-    return state_sp, r, is_terminal  # position, reward, si terminal
+    return state_sp, r, is_terminal, a  # position, reward, si terminal, real action made
 
 
 

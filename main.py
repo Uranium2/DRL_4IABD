@@ -420,7 +420,7 @@ def test_tic_tac_monte_carlo_es():
         event_loop()
         a = np.argmax(Q0[state])
         #print(Q0[state])
-        state, r0, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 0)
+        state, r0, is_terminal, a = step_tic_tac(state, a, s_terminal, s_sp, 0)
         display_players(win, state, w, h, s_sp)
         sleep(1)
         if r0 == 10:
@@ -432,7 +432,7 @@ def test_tic_tac_monte_carlo_es():
             win.blit(textsurface, (50, 150))
             break
         a = np.random.choice(np.arange(9))
-        state, r1, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 1)
+        state, r1, is_terminal, a = step_tic_tac(state, a, s_terminal, s_sp, 1)
 
 
         # a = np.argmax(Q1[state])
