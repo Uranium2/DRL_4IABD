@@ -180,6 +180,8 @@ def monte_carlo_with_exploring_starts_control(
 
 def monte_carlo_with_exploring_starts_control_2(
         s_terminal,
+        s_sp,
+        player,
         states_count: int,
         actions_count: int,
         is_terminal_func: Callable,
@@ -208,11 +210,16 @@ def monte_carlo_with_exploring_starts_control_2(
 
         a0 = np.random.choice(actions)
 
-        s1, r1, t1 = step_func(s0, a0, s_terminal)
+        s1, r1, t1 = step_func(s0, a0, s_terminal, s_sp, player)
         
-        s_list, a_list, _, r_list = step_until_the_end_of_the_episode_and_return_history_2(s_terminal, s1, pi, is_terminal_func,
-                                                                                         step_func,
-                                                                                         max_steps_per_episode)
+        s_list, a_list, _, r_list = step_until_the_end_of_the_episode_and_return_history_2(s_terminal,
+                                                                                        s_sp,
+                                                                                        player,
+                                                                                        s1,
+                                                                                        pi,
+                                                                                        is_terminal_func,
+                                                                                        step_func,
+                                                                                        max_steps_per_episode)
         s_list = [s0] + s_list
         a_list = [a0] + a_list
         r_list = [r1] + r_list

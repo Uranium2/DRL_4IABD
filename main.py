@@ -406,19 +406,35 @@ def test_tic_tac_monte_carlo_es():
     S = [[list(i[0:3]), list(i[3:6]), list(i[6:10])] for i in itertools.product(player, repeat=9)]
 
     s_terminal = [(i, check_terminal_states(s)) for i, s in enumerate(S)]
+    
     s_terminal = dict(s_terminal)
 
-    A = np.arange(h * w)
+    s_i = [(str(s),i) for i, s in enumerate(S)]
+    s_i = dict(s_i)
+    i_s = [(i, s) for i, s in enumerate(S)]
+    i_s = dict(i_s)
 
-    Q, Pi = monte_carlo_with_exploring_starts_control_2(s_terminal, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
+    s_sp = [i_s, s_i]
+
+
+    A = np.arange(h * w)
+    print("monte_carlo_with_exploring_starts_control_2")
+    Q0, Pi0 = monte_carlo_with_exploring_starts_control_2(s_terminal, s_sp, 0, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
                                                       episodes_count=10000, max_steps_per_episode=100)
     
-    print(Q)
+    Q1, Pi1 = monte_carlo_with_exploring_starts_control_2(s_terminal, s_sp, 1, len(S), len(A), is_terminate_tic_tac, step_tic_tac,
+                                                      episodes_count=10000, max_steps_per_episode=100)
+    
+    print(Q0)
     print(" ")
-    print(Pi)
-    # while (True):
-    #     display_grid_tic_tac(win, w, h)
-    #     pygame.display.flip()
+    print(Pi0)
+    print(" ")
+    print(Q1)
+    print(" ")
+    print(Pi1)
+    while (True):
+        display_grid_tic_tac(win, w, h)
+        pygame.display.flip()
 
 
 if __name__ == '__main__':

@@ -49,6 +49,8 @@ def step_until_the_end_of_the_episode_and_return_history(
 
 def step_until_the_end_of_the_episode_and_return_history_2(
         s_terminal,
+        s_sp,
+        player,
         st: int,
         pi: np.ndarray,
         is_terminal_func: Callable,
@@ -64,7 +66,7 @@ def step_until_the_end_of_the_episode_and_return_history_2(
     steps_count = 0
     while not is_terminal_func(st, s_terminal) and steps_count < max_steps:
         at = np.random.choice(actions, p=pi[st])
-        st_p, rt_p, t = step_func(st, at, s_terminal)
+        st_p, rt_p, t = step_func(st, at, s_terminal, s_sp, player)
         s_list.append(st)
         a_list.append(at)
         s_p_list.append(st_p)

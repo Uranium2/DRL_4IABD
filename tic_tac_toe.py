@@ -8,25 +8,52 @@ def create_tic_tac(w, h):
     S = np.arange(num_states)
     A = np.arange(num_states)
 
-def step_tic_tac(state, a, s_terminal):
-    if s_terminal[state] == [0, 1, 0]:
+def step_tic_tac(state, a, s_terminal, s_sp, player):
+
+    if player == 0:
+        pin_me = [0, 1, 0]
+        pin_ennemy = [0, 0, 1]
+    if player == 1:
+        pin_me = [0, 0, 1]
+        pin_ennemy = [0, 1, 0]
+    # get the actual state from the ID
+
+    state_board = s_sp[0][state]
+
+    # Place the cursor
+
+    l_board = []
+    for s in state_board:
+        for i in s:
+            l_board.append(i)
+    while(l_board[a] != [1, 0, 0]):
+        a = np.random.choice(np.arange(9))
+    l_board[a] = pin_me
+
+    state_board = []
+    state_board.append(l_board[:3])
+    state_board.append(l_board[3:6])
+    state_board.append(l_board[6:])
+    state_sp = s_sp[1][str(state_board)]
+
+    if s_terminal[state] == pin_me:
         is_terminal = True
         r = 1
-    if s_terminal[state] == [0, 0, 1]:
+    if s_terminal[state] == pin_ennemy:
         is_terminal = True
         r = -1
     if s_terminal[state] == [1, 0, 0]:
         is_terminal = False
         r = 0
 
-    return state, r, is_terminal  # position, reward, si terminal
+    return state_sp, r, is_terminal  # position, reward, si terminal
 
 
 
 def is_terminate_tic_tac(s, states):
-    if states[s] != [1, 0, 0]:
+    if states[s] == [1, 0, 0]:
         return False
-    return False
+    return True
 
 def check_terminal_states(s):
     for i in range(3):
@@ -42,7 +69,12 @@ def check_terminal_states(s):
 
     if (s[0][2][1:] == s[1][1][1:] and s[0][0][1:] == s[2][0][1:] and s[0][2][0] != 1):
         return s[i][0]
-    return [1, 0, 0]
+
+    for l in range(3):
+        for r in range(3):
+            if s[l][r] == [1, 0, 0]:
+                return [1, 0, 0]
+    return [1, 1, 1]
 
 
 
