@@ -14,7 +14,9 @@ from line_world_UI import display_line,  display_reward_line, display_mouse_line
 
 ## policy_evaluation
 from tic_tac_toe import create_tic_tac, is_terminate_tic_tac, step_tic_tac, check_terminal_states
-from tic_tac_toe_UI import display_grid_tic_tac, display_players, display_win
+from tic_tac_toe_UI import display_grid_tic_tac, display_players, display_win, display_players_2
+
+import settings_tic_tac
 
 import itertools
 
@@ -394,13 +396,32 @@ def test_grid_monte_carlo_es():
     display_reward_grid(win, rewards, w, h)
     display_mouse_grid(win, st, w, h)
 
+def log_tic_tac():
+    win_0 = 0
+    win_1 = 0
+    draw = 0
+    rounds = 1000
+    for i in range(rounds):
+        winner = test_tic_tac_monte_carlo_es()
+        if winner == 0:
+            win_0 = win_0 + 1
+        elif winner == 1:
+            win_1 = win_1 + 1
+        elif winner == -1:
+            draw = draw + 1
+    print("winner 0 :" + str(win_0 / rounds))
+    print("winner 1 :" + str(win_1 / rounds))
+    print("draw :" + str(draw / rounds))
+
+
+
 
 def test_tic_tac_monte_carlo_es():
     w = 3
     h = 3
-    pygame.init()
-    win = pygame.display.set_mode((w * 100, h * 100))
-    myfont = pygame.font.SysFont('Comic Sans MS', 30)
+    # pygame.init()
+    # win = pygame.display.set_mode((w * 100, h * 100))
+    # myfont = pygame.font.SysFont('Comic Sans MS', 30)
     s_terminal, s_sp, S, A = create_tic_tac(w, h)
 
 
@@ -415,25 +436,27 @@ def test_tic_tac_monte_carlo_es():
     state = s_sp[1][str(game_map)]
     is_terminal = False
     while (not is_terminal):
-        print(is_terminal)
-        display_grid_tic_tac(win, w, h)
-        pygame.display.flip()
-        event_loop()
+        # display_grid_tic_tac(win, w, h)
+        # pygame.display.flip()
+        # event_loop()
         a = np.argmax(Q0[state])
         #print(Q0[state])
         state, r0, is_terminal, a = step_tic_tac(state, a, s_terminal, s_sp, 0)
-        display_players(win, state, w, h, s_sp)
-        sleep(0.3)
-        if r0 == 10:
+        # display_players(win, state, w, h, s_sp)
+        # sleep(0.3)
+        if r0 == settings_tic_tac.reward_win:
             print("a")
-            display_win(win, 0, state, s_sp)
+            # display_win(win, 0, state, s_sp)
+            return 0
             break
-        elif r0 == -10:
+        elif r0 == settings_tic_tac.reward_lose:
             print("b")
-            display_win(win, 1, state, s_sp)
+            # display_win(win, 1, state, s_sp)
+            return 1
             break
-        elif r0 == 1:
-            display_win(win, -1, state, s_sp)
+        elif r0 == settings_tic_tac.reward_draw:
+            # display_win(win, -1, state, s_sp)
+            return -1
             break
         a = np.random.choice(np.arange(9))
         state, r1, is_terminal, a = step_tic_tac(state, a, s_terminal, s_sp, 1)
@@ -444,20 +467,22 @@ def test_tic_tac_monte_carlo_es():
         # print("J2 action " + str(a))
         # print(Q1[state])
         # state, r, is_terminal = step_tic_tac(state, a, s_terminal, s_sp, 1)
-        display_players(win, state, w, h, s_sp)
-        sleep(0.3)
-        if r1 == 10:
-            display_win(win, 1, state, s_sp)
+        # display_players(win, state, w, h, s_sp)
+        # sleep(0.3)
+        if r1 == settings_tic_tac.reward_win:
+            # display_win(win, 1, state, s_sp)
+            return 1
             break
-        elif r1 == -10:
-            display_win(win, 0, state, s_sp)
+        elif r1 == settings_tic_tac.reward_lose:
+            # display_win(win, 0, state, s_sp)
+            return 0
             break
-        elif r1 == 1:
+        elif r1 == settings_tic_tac.reward_draw:
+            # display_win(win, -1, state, s_sp)
+            return -1
+            break
 
-            display_win(win, -1, state, s_sp)
-            break
-
-    sleep(10)
+    # sleep(10)
 
 
 
@@ -476,7 +501,19 @@ if __name__ == '__main__':
     #test_grid_policy_iteration_2()
     #test_grid_monte_carlo_es()
 
-    test_tic_tac_monte_carlo_es()
+    # test_tic_tac_monte_carlo_es()
+    log_tic_tac()
     # s = [[[0, 1, 0], [0, 1, 0], [0, 0, 1]], [[0, 1, 0], [0, 0, 1], [0, 0, 1]], [[1, 0, 0], [0, 1, 0], [0, 0, 1]]]
     # print(s)
     # print(check_terminal_states(s))
+
+    # states = []
+    # w = 3
+    # h = 3
+    # pygame.init()
+    # win = pygame.display.set_mode((w * 100, h * 100))
+    # for s in states:
+    #     print(s)
+    #     display_grid_tic_tac(win, w, h)
+    #     display_players_2(win, s)
+    #     sleep(5)

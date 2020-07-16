@@ -80,3 +80,17 @@ def display_players(win, state, w, h, sp):
             elif y == [0, 0, 1]:
                 win.blit(playerO_img, (j * 100 + 30, i * 100 + 30))
     pygame.display.flip()
+
+def display_players_2(win, game_map):
+    playerX_img = pygame.image.load("images/X.png").convert_alpha()
+    playerO_img = pygame.image.load("images/O.png").convert_alpha()
+    playerX_img = pygame.transform.scale(playerX_img, (40, 40))
+    playerO_img = pygame.transform.scale(playerO_img, (40, 40))
+
+    for i, x in enumerate(game_map):
+        for j, y in enumerate(x):
+            if y == [0, 1, 0]:
+                win.blit(playerX_img, (j * 100 + 30, i * 100 + 30))
+            elif y == [0, 0, 1]:
+                win.blit(playerO_img, (j * 100 + 30, i * 100 + 30))
+    pygame.display.flip()

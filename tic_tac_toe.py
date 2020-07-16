@@ -1,7 +1,7 @@
 import itertools
 
 import numpy as np
-
+import settings_tic_tac
 
 def create_tic_tac(w, h):
     player = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
@@ -58,22 +58,22 @@ def step_tic_tac(state, a, s_terminal, s_sp, player):
 
     if s_terminal[state_sp] == pin_me:
         is_terminal = True
-        r = 10
+        r = settings_tic_tac.reward_win
     elif s_terminal[state_sp] == pin_ennemy:
         is_terminal = True
-        r = -10
+        r = settings_tic_tac.reward_lose
     elif s_terminal[state_sp] == [1, 0, 0]:
         is_terminal = False
-        r = 0
+        r = settings_tic_tac.reward_move
     elif s_terminal[state_sp] == [1, 1, 1]:
         is_terminal = True
-        r = 1
-    else:
-        print(s_terminal[state_sp])
-        print("ERREUR")
-    print("player: " + str(player))
-    print(r)
-    print(is_terminal)
+        r = settings_tic_tac.reward_draw
+    # else:
+    #     print(s_terminal[state_sp])
+    #     print("ERREUR")
+    # print("player: " + str(player))
+    # print(r)
+    # print(is_terminal)
     return state_sp, r, is_terminal, a  # position, reward, si terminal, real action made
 
 
@@ -95,7 +95,7 @@ def check_terminal_states(s):
     if (s[0][0][1:] == s[1][1][1:] and s[0][0][1:] == s[2][2][1:] and s[0][0][0] != 1):
         return s[0][0]
 
-    if (s[0][2][1:] == s[1][1][1:] and s[0][0][1:] == s[2][0][1:] and s[0][2][0] != 1):
+    if (s[0][2][1:] == s[1][1][1:] and s[0][2][1:] == s[2][0][1:] and s[0][2][0] != 1):
         return s[2][0]
 
     for l in range(3):
